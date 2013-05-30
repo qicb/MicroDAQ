@@ -1,16 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Data;
 
 namespace MicroDAQ
 {
-    class MachineData : JonLibrary.OPC.Machine
+    /// <summary>
+    /// 数量项管理器
+    /// </summary>
+    class DataItemManager : JonLibrary.OPC.Machine
     {
         public List<DataItem> Items = null;
         public Dictionary<int, DataItem> ItemPair = null;
-        public MachineData(string name, string[] dataHead, string[] data)
+        /// <summary>
+        /// 使用由指定的xx建立管理器
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="dataHead"></param>
+        /// <param name="data"></param>
+        public DataItemManager(string name, string[] dataHead, string[] data)
             : base()
         {
             this.Name = Name;
@@ -46,7 +54,6 @@ namespace MicroDAQ
             switch (groupName)
             {
                 case GROUP_NAME_CTRL:
-
                     for (int i = 0; i < item.Length; i++)
                     {
                         ushort[] val = null;
@@ -56,6 +63,7 @@ namespace MicroDAQ
                             this.Items[item[i]].ID = val[0];
                             this.Items[item[i]].Type = (DataType)val[1];
                             this.Items[item[i]].State = (DataState)val[2];
+                            this.Items[item[i]].Quality = Qualities[i];
                             UpdateItemPair(this.Items[item[i]].ID, this.Items[item[i]]);
                         }
                     }
@@ -66,6 +74,7 @@ namespace MicroDAQ
                         if (value[i] != null)
                         {
                             this.Items[item[i]].Value = (float)value[i];
+                            this.Items[item[i]].Quality = Qualities[i];
                         }
                     }
                     break;
@@ -73,7 +82,7 @@ namespace MicroDAQ
             OnStatusChannge();
         }
 
-        private void UpdateItemPair(int key, DataItem item)
+        protected void UpdateItemPair(int key, DataItem item)
         {
             if (!ItemPair.ContainsKey(key))
             { ItemPair.Add(key, item); }

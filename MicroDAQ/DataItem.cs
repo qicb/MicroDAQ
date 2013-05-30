@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace MicroDAQ
@@ -15,6 +14,6 @@ namespace MicroDAQ
         public DateTime DataTime { get; internal protected set; }
         public DateTime SyncTime { get; internal protected set; }
         public float Value { get; internal protected set; }
-
+        public short Quality { get; internal protected set; }
     }
 }
